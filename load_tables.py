@@ -1,6 +1,19 @@
 import numpy as np
 
 def load_fixed_interleaving_pattern_table(path: str) -> np.ndarray:
+    """
+    Function for loading fixed interleaving pattern table.
+
+    Parameters
+    ----------
+    path : str
+        Path to .txt file which represents fixed interleaving table.
+    
+    Returns
+    -------
+    np.ndarray
+        Vector representing fixed interleaving pattern table.
+    """
     
     with open(path, "rt") as file:
         lines = file.readlines()
@@ -38,6 +51,19 @@ def load_fixed_interleaving_pattern_table(path: str) -> np.ndarray:
     
 
 def load_polar_sequence_and_reliability_table(path: str) -> np.ndarray:
+    """
+    Function for loading polar sequence and its corresponding reiablity table
+
+    Parameters
+    ----------
+    path : str
+        Path to .txt file representing polar seqence and its reliability table.
+    
+    Returns
+    -------
+    np.ndarray
+        Vector where indexes represent realiabilities and values represent polar sequence.
+    """
 
     with open(path, "rt") as file:
         table_str = file.read()

@@ -1,11 +1,21 @@
 import numpy as np
 from math import log2, ceil
-from load_tables import load_fixed_interleaving_pattern_table
+from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
 
 
 class Encoder:
-    def __init__(self):
-        pass
+    def __init__(self, pi_max_il: np.ndarray, Q: np.ndarray):
+        """
+        Parameters
+        ----------
+        pi_max_il : np.ndarray
+            Vector representing fixed interleaving pattern table.
+        Q : np.ndarray
+            Vector where indexes represent realiabilities and values represent polar sequence.
+        """
+        
+        self.pi_max_il = pi_max_il
+        self.Q = Q
 
 
     def determine_n(self, K: int, E, n_max: int) -> int:
@@ -32,7 +42,7 @@ class Encoder:
         if ( E <= (9/8) * pow(2, ceil(log2(E))-1) ) and ( (K / E) < 9/16 ):
             n1 = ceil(log2(E)) - 1
         else:
-            n1 = log2(E)
+            n1 = ceil(log2(E))
         
         R_min = 1/8
         n2 = ceil(log2(K / R_min))
@@ -43,7 +53,7 @@ class Encoder:
         return n
     
 
-    def interleave(self, K: int, do_interleaving: bool, fixed_interleaving_pattern: np.ndarray) -> np.ndarray:
+    def interleave(self, K: int, i_il: bool, pi_max_il: np.ndarray) -> np.ndarray:
         """
         Function is doing interleaving to distribute errors on the output of decoder and increase efficiency of coding.
         
@@ -51,9 +61,9 @@ class Encoder:
         ----------
         K : int
             Number of bits in input bit sequence.
-        do_interleaving : bool
+        i_il : bool
             When set to False no interleaving is occuring.
-        param fixed_interleaving_pattern : np.ndarray
+        pi_max_il : np.ndarray
             Representing fixed interleaving pattern (table) stated in 5G standard.
         
         Returns
@@ -62,40 +72,85 @@ class Encoder:
             The created interleaving pattern.
         """
 
-        K_max = fixed_interleaving_pattern.size     # number of entries in table of fixed interleaving pattern
-        interleaving_pattern = np.empty(K, dtype=np.int16)
+        K_max_il = pi_max_il.size     # number of entries in table of fixed interleaving pattern
+        pi = np.empty(K, dtype=np.int16)
 
-        if not do_interleaving:
-            interleaving_pattern = np.arange(K)
+        if not i_il:
+            pi = np.arange(K)
         else:
             k = 0
-            for m in range(K_max):
-                if fixed_interleaving_pattern[m] >= K_max - K:
-                    interleaving_pattern[k] = fixed_interleaving_pattern[m] - (K_max - K)
+            for m in range(K_max_il):
+                if pi_max_il[m] >= K_max_il - K:
+                    pi[k] = pi_max_il[m] - (K_max_il - K)
                     k += 1
 
-        return interleaving_pattern
+        return pi
 
     
-    def encode(self, input_bit_sequence: np.ndarray) -> np.ndarray:
+    def encode(self, msg: np.ndarray) -> np.ndarray:
         """
-        Function for encoding.
+        Function for encoding using polar code, function does not anticipate the presence of parity bits in message.
 
         Parameters
         ----------
-        input_bit_sequence : np.ndarray
-            Bits sequence to be encoded.
+        m : np.ndarray
+            Message bits sequence to be encoded.
         
         Returns
         -------
         np.ndarray
             Encoded bits sequence.
         """
+        
+        K = msg.size
+        n = self.determine_n(K=K, E=10, n_max=9)
+        print(n)
+        N = pow(2, n)
+        
+        # permutation_pattern = self.interleave(K=K, i_il=False, pi_max_il=self.pi_max_il)
+        Q = self.Q[self.Q < N]
+        frozen_bits_idxes = Q[:N-K]
+        message_bits_idxes = Q[N-K:]
+
+
+        u = np.zeros(N, dtype=np.int8)
+
+        u[message_bits_idxes] = msg
+
+
+        ### 1st method
+        G2 = np.array([[1,0], [1,1]])     # base kernel
+        Gn = G2
+        
+        for _ in range(n-1):
+            Gn = np.kron(G2, Gn)
+
+        d1 = np.mod(u @ Gn, 2)
+        ###
+
+
+        ### 2nd method
+        k = 1
+        while k < N:
+            for i in range(0, N, 2*k):
+                u[i:i+k] = np.mod(u[i:i+k] + u[i+k:i+2*k], 2)
+            k *= 2
+        
+        d2 = u
+        ###
+        
+        
+        return (n, d1, d2)
 
 
 
 
+path_1 = "tables\\fixed_interleaving_pattern_table.txt"
+path_2 = "tables\\polar_sequence_and_its_corresponding_reliability.txt"
 
+encoder = Encoder(pi_max_il=load_fixed_interleaving_pattern_table(path_1), 
+                  Q=load_polar_sequence_and_reliability_table(path_2))
 
+message = np.array([1,0,1,1,1,0,0,1,0,1]) # np.random.randint(0, 2, 10, dtype=np.int8)
 
-input_bit_seq = np.random.randint(0, 2, 100, dtype=np.int8)
+print(encoder.encode(msg=message))
