@@ -4,6 +4,27 @@ from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequen
 
 
 class Encoder:
+    """
+    Class representing encoder.
+
+    ...
+    Attributes
+    ----------
+    pi_max_il : np.ndarray
+        Vector representing fixed interleaving pattern table.
+    Q : np.ndarray
+        Vector where indexes represent realiabilities and values represent polar sequence.
+
+    Methods
+    -------
+    determine_n(K, E, n_max)
+        The purpose of this function is to determine n.
+    interleave(K, i_il, pi_max_il)
+        Function is doing interleaving to distribute errors on the output of decoder and increase efficiency of coding.
+    encode(msg)
+        Function for encoding using polar code, function does not anticipate the presence of parity bits in message.
+    """
+    
     def __init__(self, pi_max_il: np.ndarray, Q: np.ndarray):
         """
         Parameters
@@ -104,53 +125,32 @@ class Encoder:
         
         K = msg.size
         n = self.determine_n(K=K, E=10, n_max=9)
-        print(n)
         N = pow(2, n)
         
         # permutation_pattern = self.interleave(K=K, i_il=False, pi_max_il=self.pi_max_il)
         Q = self.Q[self.Q < N]
         frozen_bits_idxes = Q[:N-K]
         message_bits_idxes = Q[N-K:]
-
-
         u = np.zeros(N, dtype=np.int8)
-
         u[message_bits_idxes] = msg
 
-
-        ### 1st method
-        G2 = np.array([[1,0], [1,1]])     # base kernel
-        Gn = G2
-        
-        for _ in range(n-1):
-            Gn = np.kron(G2, Gn)
-
-        d1 = np.mod(u @ Gn, 2)
-        ###
-
-
-        ### 2nd method
         k = 1
         while k < N:
             for i in range(0, N, 2*k):
                 u[i:i+k] = np.mod(u[i:i+k] + u[i+k:i+2*k], 2)
             k *= 2
-        
-        d2 = u
-        ###
-        
-        
-        return (n, d1, d2)
+    
+        return u
 
 
+if __name__ == "__main__":
 
+    path_1 = "tables\\fixed_interleaving_pattern_table.txt"
+    path_2 = "tables\\polar_sequence_and_its_corresponding_reliability.txt"
 
-path_1 = "tables\\fixed_interleaving_pattern_table.txt"
-path_2 = "tables\\polar_sequence_and_its_corresponding_reliability.txt"
+    encoder = Encoder(pi_max_il=load_fixed_interleaving_pattern_table(path_1), 
+                    Q=load_polar_sequence_and_reliability_table(path_2))
 
-encoder = Encoder(pi_max_il=load_fixed_interleaving_pattern_table(path_1), 
-                  Q=load_polar_sequence_and_reliability_table(path_2))
+    message = np.array([1,0,1,1,1,0,0,1,0,1]) # np.random.randint(0, 2, 10, dtype=np.int8)
 
-message = np.array([1,0,1,1,1,0,0,1,0,1]) # np.random.randint(0, 2, 10, dtype=np.int8)
-
-print(encoder.encode(msg=message))
+    print(encoder.encode(msg=message))
