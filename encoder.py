@@ -68,7 +68,7 @@ class Encoder:
         R_min = 1/8
         n2 = ceil(log2(K / R_min))
 
-        n_min = 5
+        n_min = 3
         n = max(min(n1, n2, n_max), n_min)
 
         return n
@@ -151,6 +151,6 @@ if __name__ == "__main__":
     encoder = Encoder(pi_max_il=load_fixed_interleaving_pattern_table(path_1), 
                     Q=load_polar_sequence_and_reliability_table(path_2))
 
-    message = np.array([1,0,1,1,1,0,0,1,0,1]) # np.random.randint(0, 2, 10, dtype=np.int8)
+    message = np.array([1,0,1,1]) # np.random.randint(0, 2, 10, dtype=np.int8)
 
     print(encoder.encode(msg=message))
