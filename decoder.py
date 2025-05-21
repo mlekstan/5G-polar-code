@@ -15,6 +15,11 @@ class Decoder(object):
         Method for decoding code words.
     """
 
+    def __init__(self, frozen_bits: np.ndarray):
+        pass
+
+
+
     def decode(self, r: np.ndarray) -> np.ndarray:
         """
         Function for decoding code word (polar code).
@@ -31,13 +36,12 @@ class Decoder(object):
         """
 
         # the node of decoding binary tree
-        class TreeNode(object):
-            def __init__(self, L=None, left_child=None, right_child=None):
+        class DecodingTreeNode(object):
+            def __init__(self, left_child=None, right_child=None):
                 self.left_child = left_child
                 self.right_child = right_child
-                self.L = L
 
-            def f(self, L: np.ndarray):
+            def f(self, L: np.ndarray) -> np.ndarray:
                 sgn = lambda x: copysign(1, x)
                 new_L = np.zeros(L.size//2, dtype=L.dtype)
 
@@ -46,10 +50,10 @@ class Decoder(object):
                     belief = sgn(beliefs[0]) * sgn(beliefs[1]) * min(abs(beliefs[0]), abs(beliefs[1]))
                     new_L[i] = belief
                     i += 1
-
+                
                 return new_L
 
-            def g(self, L: np.ndarray, c: np.ndarray):
+            def g(self, L: np.ndarray, c: np.ndarray) -> np.ndarray:
                 new_L = np.zeros(L.size//2, dtype=L.dtype)
 
                 i = 0
@@ -61,12 +65,12 @@ class Decoder(object):
                 return new_L
         
 
-        def createDecodingTree(root: TreeNode, depth: int) -> TreeNode:
+        def createDecodingTree(root: DecodingTreeNode, depth: int) -> DecodingTreeNode:
             if depth == 0:
                 return root
 
-            root.left_child = TreeNode()
-            root.right_child = TreeNode()
+            root.left_child = DecodingTreeNode()
+            root.right_child = DecodingTreeNode()
             depth -= 1
 
             createDecodingTree(root.left_child, depth)
@@ -74,8 +78,12 @@ class Decoder(object):
 
             return root
         
+        
+        def combine(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
+            return np.concatenate([np.mod(v1 + v2, 2), v2])
 
-        def decodingTreeTraverse(root: TreeNode, L: np.ndarray) -> np.ndarray:
+
+        def decodingTreeTraverse(root: DecodingTreeNode, L: np.ndarray) -> np.ndarray:
 
             if root.left_child == None and root.right_child == None:
                 u = 0 if L[0] >= 0 else 1
@@ -86,11 +94,10 @@ class Decoder(object):
             right_L = root.g(L, u1)
             u2 = decodingTreeTraverse(root.right_child, right_L)
 
-            return np.concatenate([u1, u2])         # to fix decoding doesn't work properly
+            return combine(u1, u2)
 
         
-        root = TreeNode(L=r)
-        root = createDecodingTree(root=root, depth=int(log2(r.size)))
+        root = createDecodingTree(root=DecodingTreeNode(), depth=int(log2(r.size)))
         decoded_seq = decodingTreeTraverse(root, r)
         
         return decoded_seq
