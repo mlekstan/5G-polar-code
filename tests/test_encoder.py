@@ -3,26 +3,27 @@ import sys
 sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\")
 
 import numpy as np
+from numpy.typing import NDArray
 from numpy.testing import assert_array_equal
 from encoder import Encoder
 from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
 
 
 
-def stndard_encoding(msg: np.ndarray, encoder: Encoder) -> np.ndarray:
+def stndard_encoding(msg: NDArray[np.uint8], encoder: Encoder) -> NDArray[np.uint8]:
     """
     Function that impelemnts polar encoding directly according to 5G standard.
 
     Parameters
     ----------
-    msg : np.ndarray
+    msg : NDArray[np.uint8]
         Message bits sequence to be encoded.
     encoder : encoder.Encoder
         Encoder object
     
     Returns
     -------
-    np.ndarray
+    NDArray[np.uint8]
         Encoded bits sequence.
     """
 
