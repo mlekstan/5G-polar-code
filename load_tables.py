@@ -1,6 +1,8 @@
+from typing import List
 import numpy as np
+from numpy.typing import NDArray
 
-def load_fixed_interleaving_pattern_table(path: str) -> np.ndarray:
+def load_fixed_interleaving_pattern_table(path: str) -> NDArray[np.uint8]:
     """
     Function for loading fixed interleaving pattern table.
 
@@ -11,19 +13,19 @@ def load_fixed_interleaving_pattern_table(path: str) -> np.ndarray:
     
     Returns
     -------
-    np.ndarray
+    NDArray[np.uint8]
         Vector representing fixed interleaving pattern table.
     """
     
     with open(path, "rt") as file:
-        lines = file.readlines()
+        lines: List[str] = file.readlines()
 
-    data = []
+    data: List[List[str]] = []
     for line in lines:
-        space_count = 0
-        index = ""
-        val = ""
-        index_val = []
+        space_count: int = 0
+        index: str = ""
+        val: str = ""
+        index_val: List[str] = []
                 
         for char in line:
             if char == " " or char == "\n":
@@ -43,14 +45,14 @@ def load_fixed_interleaving_pattern_table(path: str) -> np.ndarray:
                     val += char
 
 
-    pattern_array = np.zeros(len(data), dtype=np.int16)
+    pattern_array = np.zeros(len(data), dtype=np.uint8)
     for index, val in data:
         pattern_array[int(index)] = int(val)
 
     return pattern_array
     
 
-def load_polar_sequence_and_reliability_table(path: str) -> np.ndarray:
+def load_polar_sequence_and_reliability_table(path: str) -> NDArray[np.uint16]:
     """
     Function for loading polar sequence and its corresponding reiablity table
 
@@ -61,7 +63,7 @@ def load_polar_sequence_and_reliability_table(path: str) -> np.ndarray:
     
     Returns
     -------
-    np.ndarray
+    NDArray[np.uint16]
         Vector where indexes represent realiabilities and values represent polar sequence.
     """
 
@@ -72,7 +74,7 @@ def load_polar_sequence_and_reliability_table(path: str) -> np.ndarray:
   
     table = [[table_list[i], table_list[i+1]] for i in range(0, len(table_list), 2)]
 
-    table_array = np.zeros(len(table), dtype=np.int16)
+    table_array = np.zeros(len(table), dtype=np.uint16)
     for realiability, index in table:
         table_array[realiability] = index
 
