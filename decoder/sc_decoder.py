@@ -2,7 +2,7 @@ from math import log2
 from typing import Tuple
 import numpy as np
 from numpy.typing import NDArray
-from decoding_tree import DecodingTreeNode
+from sc_decoding_tree import DecodingTreeNode
 
 
 class Decoder(object):
@@ -51,9 +51,7 @@ class Decoder(object):
             
             return np.concatenate([sum_mod2, v2_uint8])
     
-
     
-
 
     def decode(self, r: NDArray[np.float64], K: int) -> Tuple[NDArray[np.uint8], NDArray[np.uint8]]:
         """

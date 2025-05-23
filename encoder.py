@@ -61,6 +61,11 @@ class Encoder:
         int
             The predcited n.
         """
+
+        if E < K:
+            raise ValueError(f"E = {E} is less than K = {K}: too few bits to hold the information")
+        if E > 2**n_max:
+            raise ValueError(f"E = {E} exceeds maximum block length 2**{n_max} = {2**n_max}")
         
         if ( E <= (9/8) * pow(2, ceil(log2(E))-1) ) and ( (K / E) < 9/16 ):
             n1 = ceil(log2(E)) - 1
@@ -70,7 +75,7 @@ class Encoder:
         R_min = 1/8
         n2 = ceil(log2(K / R_min))
 
-        n_min = 3 # default is 5 
+        n_min = 5 # default is 5 
         n = max(min(n1, n2, n_max), n_min)
 
         return n
@@ -110,7 +115,7 @@ class Encoder:
         return pi
 
     
-    def encode(self, msg: NDArray[np.uint8]) -> NDArray[np.uint8]:
+    def encode(self, msg: NDArray[np.uint8], E: int) -> NDArray[np.uint8]:
         """
         Function for encoding using polar code, function does not anticipate the presence of parity bits in message.
 
@@ -118,6 +123,8 @@ class Encoder:
         ----------
         msg : NDArray[np.uint8]
             Message bits sequence to be encoded.
+        E : int
+            Rate matching output length. It is stated by the higher layers (MAC, scheduler) before channel encoding - in the transmission planning phase.
         
         Returns
         -------
@@ -126,7 +133,7 @@ class Encoder:
         """
         
         K = msg.size
-        n = self.determine_n(K=K, E=10, n_max=9)
+        n = self.determine_n(K=K, E=E, n_max=9)
         N = pow(2, n)
         
         # permutation_pattern = self.interleave(K=K, i_il=False, pi_max_il=self.pi_max_il)
@@ -155,5 +162,5 @@ if __name__ == "__main__":
     Q=load_polar_sequence_and_reliability_table(path_2)
 
     encoder = Encoder(pi_max_il, Q)
-    message = np.array([1,0,1,1]) # np.random.randint(0, 2, 10, dtype=np.int8)
-    print(encoder.encode(msg=message))
+    message = np.random.randint(0, 2, 10, dtype=np.int8)
+    print(encoder.encode(msg=message, E=message.size))

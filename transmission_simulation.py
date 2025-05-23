@@ -8,8 +8,7 @@ from numpy.typing import NDArray
 
 from encoder import Encoder
 from modulator import Modulator
-from decoder import Decoder
-
+from sc_decoder import Decoder
 from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
 
 
@@ -42,8 +41,13 @@ class Channel(object):
     def send_through(self, mod_seq: NDArray[np.int8], EbN0dB: float, K: int) -> NDArray[np.float64]:
         N = mod_seq.size
         noise_method = getattr(self, self.noise_type)
-        #if isinstance(noise_method, (FunctionType, MethodType)):
-        return mod_seq + noise_method(EbN0dB, K, N)
+        
+        if noise_method is None:
+            raise AttributeError(f"Lack of noise method '{self.noise_type}'")
+        if not isinstance(noise_method, (FunctionType, MethodType)):
+            raise TypeError(f"'{self.noise_type}' is not function or method")
+        else:
+            return mod_seq + noise_method(EbN0dB, K, N)
     
 
 
@@ -52,8 +56,8 @@ if __name__ == "__main__":
     path_1 = "tables\\fixed_interleaving_pattern_table.txt"
     path_2 = "tables\\polar_sequence_and_its_corresponding_reliability.txt"
 
-    pi_max_il=load_fixed_interleaving_pattern_table(path_1)
-    Q=load_polar_sequence_and_reliability_table(path_2)
+    pi_max_il = load_fixed_interleaving_pattern_table(path_1)
+    Q = load_polar_sequence_and_reliability_table(path_2)
 
     ### create actors
     encoder = Encoder(pi_max_il, Q)
@@ -64,19 +68,16 @@ if __name__ == "__main__":
 
 
     ### transmit
-    msg = np.random.randint(low=0, high=2, size=15, dtype=np.uint8)
-    #msg = np.array([0,1,0,1,1,0], dtype=np.uint8)
+    msg = np.random.randint(low=0, high=2, size=32, dtype=np.uint8) #msg = np.array([0,1,0,1,1,0], dtype=np.uint8)
     K = msg.size
     
-    code_word = encoder.encode(msg)
+    code_word = encoder.encode(msg, 33)
 
     bpsk_out = modulator.bpsk(code_word)
 
-    channel_out = channel.send_through(mod_seq=bpsk_out, EbN0dB=9, K=K)
-    #channel_out = bpsk_out
-
+    channel_out = channel.send_through(mod_seq=bpsk_out, EbN0dB=9, K=K) #channel_out = bpsk_out
+    
     recreated_encoded, decoded_seq = decoder.decode(r=channel_out, K=K)
     ###
 
-
-    print(f"input_bits: {msg}\nencoded: {code_word}\nbpsk: {bpsk_out}\nchannel_out: {channel_out}\nrecreated_encoded: {recreated_encoded}\ndecoded: {decoded_seq}") # results
+    print(f"input_bits: {msg.size}\nencoded: {code_word.size}\nbpsk: {bpsk_out.size}\nchannel_out: {channel_out.size}\nrecreated_encoded: {recreated_encoded.size}\ndecoded: {decoded_seq.size}") # results
