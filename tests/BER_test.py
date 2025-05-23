@@ -1,4 +1,3 @@
-from typing import List
 import sys
 sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\")
 sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\decoder\\")
@@ -19,7 +18,12 @@ def BER(input: NDArray[np.uint8], output: NDArray[np.uint8]) -> float:
     return (input != output).sum()/input.size
 
 
-def test_BER(EbN0dB_values: NDArray[np.int8], K_values: NDArray[np.uint16]) -> List:
+def generate_messages(K_values: NDArray[np.uint16]):
+    for K in K_values:
+        yield np.random.randint(low=0, high=2, size=K, dtype=np.uint8)
+
+
+def test_BER(EbN0dB_values: NDArray[np.float64], K_values: NDArray[np.uint16]) -> NDArray[np.float64]:
     path_1 = "tables\\fixed_interleaving_pattern_table.txt"
     path_2 = "tables\\polar_sequence_and_its_corresponding_reliability.txt"
 
@@ -33,33 +37,31 @@ def test_BER(EbN0dB_values: NDArray[np.int8], K_values: NDArray[np.uint16]) -> L
     decoder = Decoder(Q)
     ###
 
-    msg_list = list()
-    for K in K_values:
-        msg_list.append(np.random.randint(low=0, high=2, size=K, dtype=np.uint8)) # creating random messages of various length
+    avg_ber_arr = np.zeros(EbN0dB_values.size, dtype=np.float64)
+    for msg in generate_messages(K_values):
+        code_word = encoder.encode(msg, E=msg.size) # encoding
+        bpsk_out = modulator.bpsk(code_word) # BPSK modulating 
         
-
-    avg_ber_list = list()
-    for EbN0dB in EbN0dB_values:
-        avg_ber = 0
-        for msg in msg_list:
-            code_word = encoder.encode(msg, msg.size) # encoding
-            bpsk_out = modulator.bpsk(code_word) # BPSK modulating 
+        for i, EbN0dB in enumerate(EbN0dB_values):     
             channel_out = channel.send_through(mod_seq=bpsk_out, EbN0dB=EbN0dB, K=msg.size) # adding white noise
             _, decoded_seq = decoder.decode(r=channel_out, K=msg.size) # decoding
 
-            avg_ber += BER(msg, decoded_seq)/len(msg_list) # calculating average BER for defined Eb/N0 [dB]
-        
-        avg_ber_list.append(avg_ber) # creating list with values of BER for different Eb/N0 [dB]
+            avg_ber_arr[i] += BER(msg, decoded_seq)/K_values.size # calculating average BER for next Eb/N0 [dB] values
     
-    return avg_ber_list
+    return avg_ber_arr
+
 
 
 if __name__ == "__main__":
 
-    EbN0dB_values = np.array([0,1,2,3,4,5,6,7,8,9])
+    EbN0dB_values = np.array([i for i in np.arange(0, 11, 0.5)])
     K_values = np.array([i for i in range(10, 500, 10)])
-    avg_ber_list = test_BER(EbN0dB_values, K_values)
+    avg_ber_arr = test_BER(EbN0dB_values, K_values)
+    print(avg_ber_arr)
 
     fig, ax = plt.subplots()
-    ax.plot(EbN0dB_values, avg_ber_list)
+    ax.plot(EbN0dB_values, avg_ber_arr)
+    ax.set_title("Bit Error Rate")
+    ax.set_xlabel("E$_b$/N$_0$ [dB]")
+    ax.set_ylabel("BER")
     plt.show()
