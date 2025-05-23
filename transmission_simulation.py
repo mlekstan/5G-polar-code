@@ -20,15 +20,22 @@ class Channel(object):
     ----------
     noise_type : str
         Type of noise in channel.
-    
+    _noise_method: Callable[[float, int, int], NDArray[np.float64]]
+        Method responible for generating noise.
     Methods
     -------
     gwn()
         Function returns samples of gaussian white noise.
+    send_through()
+        Function retunrs samples of signal after channel noise.
     """
 
     def __init__(self, noise_type: str):
         self.noise_type = noise_type
+        noise_method = getattr(self, noise_type)
+        if not isinstance(noise_method, (FunctionType, MethodType)):
+            raise ValueError(f"There is no such method '{noise_type}' in Channel class.")
+        self._noise_method = noise_method
 
 
     def gwn(self, EbN0dB: float, K: int, N: int) -> NDArray[np.float64]:
@@ -40,15 +47,8 @@ class Channel(object):
 
     def send_through(self, mod_seq: NDArray[np.int8], EbN0dB: float, K: int) -> NDArray[np.float64]:
         N = mod_seq.size
-        noise_method = getattr(self, self.noise_type)
+        return mod_seq + self._noise_method(EbN0dB, K, N)
         
-        if noise_method is None:
-            raise AttributeError(f"Lack of noise method '{self.noise_type}'")
-        if not isinstance(noise_method, (FunctionType, MethodType)):
-            raise TypeError(f"'{self.noise_type}' is not function or method")
-        else:
-            return mod_seq + noise_method(EbN0dB, K, N)
-    
 
 
 if __name__ == "__main__":
@@ -80,4 +80,11 @@ if __name__ == "__main__":
     recreated_encoded, decoded_seq = decoder.decode(r=channel_out, K=K)
     ###
 
-    print(f"input_bits: {msg.size}\nencoded: {code_word.size}\nbpsk: {bpsk_out.size}\nchannel_out: {channel_out.size}\nrecreated_encoded: {recreated_encoded.size}\ndecoded: {decoded_seq.size}") # results
+    print(f"""\
+    input_bits       : {msg}
+    encoded          : {code_word}
+    bpsk             : {bpsk_out}
+    channel_out      : {channel_out}
+    recreated_encoded: {recreated_encoded}
+    decoded          : {decoded_seq}
+    """) # results
