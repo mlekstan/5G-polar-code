@@ -9,7 +9,6 @@ class Encoder:
     """
     Class representing encoder.
 
-    ...
     Attributes
     ----------
     pi_max_il : NDArray[np.uint8]
@@ -29,12 +28,15 @@ class Encoder:
     
     def __init__(self, pi_max_il: NDArray[np.uint8], Q: NDArray[np.uint16]):
         """
+        Inicjalizacja enkodera.
+
         Parameters
         ----------
         pi_max_il : NDArray[np.uint8]
             Vector representing fixed interleaving pattern table.
+
         Q : NDArray[np.uint16]
-            Vector where indexes represent realiabilities and values represent polar sequence.
+            Vector where indexes represent reliabilities and values represent polar sequence.
         """
         
         self.pi_max_il = pi_max_il

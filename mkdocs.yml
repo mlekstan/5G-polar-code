@@ -1,0 +1,71 @@
+site_name: 5G-polar-code
+site_url: https://root/5g-polar-code
+
+nav:
+  - Operation overview: index.md
+  - Reference:
+    - Encoder: encoder.md
+    - Modulator: modulator.md
+    - Channel: channel.md  
+    - Decoder: decoder.md
+    - BER test: ber_test.md
+  - Results: results.md
+
+theme:
+  name: material
+  icon:
+    logo: material/signal-5g
+    previous: fontawesome/solid/angle-left
+    next: fontawesome/solid/angle-right
+    repo: fontawesome/brands/github 
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers: 
+        python:
+          options:
+            docstring_style: numpy
+  - mermaid2:
+      arguments:
+        securityLevel: 'loose'
+        startOnLoad: 'true'
+        mermaid:
+            callback: ^myfun
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_javascript:
+  - js/mermaid-callbacks.js
+  - js/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  
+  
+repo_url: https://github.com/mlekstan/5G-polar-code
+repo_name: mlekstan/5G-polar-code
+
+  

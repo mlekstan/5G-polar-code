@@ -7,7 +7,8 @@ class Modulator(object):
 
     Attributes
     ----------
-
+    ...
+    
     Methods
     -------
     bpsk(bit_seq)

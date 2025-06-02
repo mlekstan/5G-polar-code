@@ -31,6 +31,7 @@ class Channel(object):
     """
 
     def __init__(self, noise_type: str):
+        """"""
         self.noise_type = noise_type
         noise_method = getattr(self, noise_type)
         if not isinstance(noise_method, (FunctionType, MethodType)):
@@ -39,6 +40,7 @@ class Channel(object):
 
 
     def gwn(self, EbN0dB: float, K: int, N: int) -> NDArray[np.float64]:
+        """"""
         N0Eb = 10 ** (-EbN0dB/10)
         std_dev = sqrt(0.5 * N/K * N0Eb)
         
@@ -46,6 +48,7 @@ class Channel(object):
 
 
     def send_through(self, mod_seq: NDArray[np.int8], EbN0dB: float, K: int) -> NDArray[np.float64]:
+        """"""
         N = mod_seq.size
         return mod_seq + self._noise_method(EbN0dB, K, N)
         
