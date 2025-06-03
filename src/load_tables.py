@@ -54,7 +54,7 @@ def load_fixed_interleaving_pattern_table(path: str) -> NDArray[np.uint8]:
 
 def load_polar_sequence_and_reliability_table(path: str) -> NDArray[np.uint16]:
     """
-    Function for loading polar sequence and its corresponding reiablity table
+    Function for loading polar sequence and its corresponding reiablity table.
 
     Parameters
     ----------

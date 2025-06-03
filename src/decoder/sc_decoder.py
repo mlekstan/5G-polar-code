@@ -32,6 +32,7 @@ class Decoder(object):
 
     @staticmethod
     def createDecodingTree(root: DecodingTreeNode, depth: int) -> DecodingTreeNode:
+        """"""
         if depth == 0:
             return root
 
@@ -46,10 +47,11 @@ class Decoder(object):
     
     @staticmethod
     def combine(v1: NDArray[np.uint8], v2: NDArray[np.uint8]) -> NDArray[np.uint8]:
-            sum_mod2 = np.mod(v1 + v2, 2).astype(np.uint8)
-            v2_uint8 = v2.astype(np.uint8)
-            
-            return np.concatenate([sum_mod2, v2_uint8])
+        """"""
+        sum_mod2 = np.mod(v1 + v2, 2).astype(np.uint8)
+        v2_uint8 = v2.astype(np.uint8)
+        
+        return np.concatenate([sum_mod2, v2_uint8])
     
     
 
@@ -57,8 +59,8 @@ class Decoder(object):
         """
         Function for decoding code word (polar code).
         
-        Paramenters
-        -----------
+        Parameters
+        ----------
         r : NDArray[np.float64]
             Encoded message (code word) after modulation (and channel influence).
         K : int
@@ -77,7 +79,7 @@ class Decoder(object):
         message_bits_idxes = Q[N-K:]
 
         def decodingTreeTraverse(root: DecodingTreeNode, L: NDArray[np.float64], bit_idx: int) -> Tuple[NDArray[np.uint8], NDArray[np.uint8], int]:
-
+            """"""
             if root.left_child is None and root.right_child is None:
                 if bit_idx in frozen_bits_idxes:
                     u = 0

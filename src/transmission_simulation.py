@@ -1,15 +1,16 @@
 import sys
-sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\decoder\\")
+sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\")
+sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\src\\decoder\\")
 
 from math import sqrt
 from types import FunctionType, MethodType
 import numpy as np
 from numpy.typing import NDArray
 
-from encoder import Encoder
-from modulator import Modulator
-from sc_decoder import Decoder
-from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
+from src.encoder import Encoder
+from src.modulator import Modulator
+from src.decoder.sc_decoder import Decoder
+from src.load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
 
 
 class Channel(object):
@@ -74,7 +75,7 @@ if __name__ == "__main__":
     msg = np.random.randint(low=0, high=2, size=32, dtype=np.uint8) #msg = np.array([0,1,0,1,1,0], dtype=np.uint8)
     K = msg.size
     
-    code_word = encoder.encode(msg, 33)
+    code_word = encoder.encode(msg, K+1)
 
     bpsk_out = modulator.bpsk(code_word)
 

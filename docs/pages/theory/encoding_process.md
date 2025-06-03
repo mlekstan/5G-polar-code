@@ -1,31 +1,4 @@
-# Operation overview
-
-## Transmission process
-Project simulates transsmission process (with focus on 5G polar code) in following steps:
-
-1. Source
-2. Polar encoding
-3. BPSK modulation
-4. Sending through AWGN channel
-5. Successive Cancelation decoding
-
-```mermaid
-flowchart LR
-  Source e1@==> E[Polar Encoder]
-  E e2@==> M[BPSK Modulator]
-  M e3@==> C[AWGN Channel]
-  C e4@==> D[SC Decoder]
-
-  e1@{ animate: true }
-  e2@{ animate: true }
-  e3@{ animate: true }
-  e4@{ animate: true }
-```
-
-
-## Encoding process
-
-### Example encding for N = 2
+## Example encding for N = 2
 
 
 **1. Polar transform $\mathbf{G}_2$**
@@ -71,8 +44,11 @@ $$
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": true}, "securityLevel": "loose"}}%%
 flowchart BT
-  B((d=1, i=0)) --> A((d=0, i=0))
-  C((d=1, i=1)) --> A
+  B((d=1, i=0)) e1@--> A((d=0, i=0))
+  C((d=1, i=1)) e2@--> A
+  
+  e1@{ animate : true }
+  e2@{ animate : true }
 ```
 !!! info "Nodes info"
     
@@ -84,7 +60,7 @@ flowchart BT
 
     
 
-### Example encoding for N = 4
+## Example encoding for N = 4
 
 **1. Polar transform $\mathbf{G}_4$**
 
@@ -155,12 +131,19 @@ $$
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": true}, "securityLevel": "loose"}}%%
 flowchart BT
-  B((d=1, i=0)) --> A((d=0, i=0))
-  C((d=1, i=1)) --> A
-  D((d=2, i=0)) --> B
-  E((d=2, i=1)) --> B
-  F((d=2, i=2)) --> C
-  G((d=2, i=3)) --> C 
+  B((d=1, i=0)) e1@--> A((d=0, i=0))
+  C((d=1, i=1)) e2@--> A
+  D((d=2, i=0)) e3@--> B
+  E((d=2, i=1)) e4@--> B
+  F((d=2, i=2)) e5@--> C
+  G((d=2, i=3)) e6@--> C
+
+  e1@{ animate : true }
+  e2@{ animate : true }
+  e3@{ animate : true }
+  e4@{ animate : true }
+  e5@{ animate : true }
+  e6@{ animate : true }
 
 ```
 
@@ -177,7 +160,7 @@ flowchart BT
     - (d=2, i=3) $\quad u_4$
 
 
-### General case
+## General case
 
 **1. Polar transform $\mathbf{G}_N$**
 
@@ -255,8 +238,3 @@ $$
 \begin{pmatrix} 0 & 0 & 0 & m_1 & 0 & m_2 & m_3 & m_4 \end{pmatrix}
 \end{aligned}
 $$
-
-## Adding noise
-
-## Decoding process
-

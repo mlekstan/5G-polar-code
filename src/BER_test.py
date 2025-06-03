@@ -1,27 +1,28 @@
 import sys
 sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\")
-sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\decoder\\")
+sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\src\\decoder\\")
 from typing import Generator
 
 import numpy as np
 from numpy.typing import NDArray
 import matplotlib.pyplot as plt
 
-from encoder import Encoder
-from modulator import Modulator
-from transmission_simulation import Channel
-from sc_decoder import Decoder
-from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
+from src.encoder import Encoder
+from src.modulator import Modulator
+from src.transmission_simulation import Channel
+from src.decoder.sc_decoder import Decoder
+from src.load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
 
 
 
 def BER(input: NDArray[np.uint8], output: NDArray[np.uint8]) -> float:
-    """Calculating BER (Bit Error Rate) for two seqences of bits.
+    """
+    Calculating BER (Bit Error Rate) for two seqences of bits.
 
     Parameters
     ----------
     input : NDArray[np.uint8]
-        Sent bits (not yet affected by noise in channel)
+        Sent bits (not yet affected by noise in channel).
     output : NDArray[np.uint8]
         Received bits after transmission.
 
@@ -35,7 +36,8 @@ def BER(input: NDArray[np.uint8], output: NDArray[np.uint8]) -> float:
 
 
 def generate_messages(K_values: NDArray[np.uint16]) -> Generator[NDArray[np.uint16], None, None]:
-    """Generates random messages of sizes provided by K_values parameter.
+    """
+    Generates random messages of sizes provided by K_values parameter.
 
     Parameters
     ----------
@@ -53,7 +55,8 @@ def generate_messages(K_values: NDArray[np.uint16]) -> Generator[NDArray[np.uint
 
 
 def avg_BER(EbN0dB_values: NDArray[np.float64], K_values: NDArray[np.uint16]) -> NDArray[np.float64]:
-    """Calculating average BER values for different Eb/N0 [dB].
+    """
+    Calculating average BER values for different Eb/N0 [dB].
 
     Parameters
     ----------
@@ -99,7 +102,7 @@ def avg_BER(EbN0dB_values: NDArray[np.float64], K_values: NDArray[np.uint16]) ->
 if __name__ == "__main__":
     """Testing BER and drawing BER vs Eb/N0 plot."""
     
-    EbN0dB_values = np.array([i for i in np.arange(0, 11, 0.1)])
+    EbN0dB_values = np.array([i for i in np.arange(0, 11, 1)])
     K_values = np.array([i for i in range(10, 500, 5)])
     avg_ber_arr = avg_BER(EbN0dB_values, K_values)
     print(avg_ber_arr)

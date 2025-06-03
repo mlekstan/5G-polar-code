@@ -2,36 +2,56 @@ site_name: 5G-polar-code
 site_url: https://root/5g-polar-code
 
 nav:
-  - Operation overview: index.md
+  - Theory and math:
+      - General scheme: pages/theory/index.md
+      - Encoding process: pages/theory/encoding_process.md
+      - BPSK modulation: pages/theory/bpsk_modulation.md
+      - Adding gaussian white noise: pages/theory/add_noise.md
+      - Decoding process: pages/theory/decoding_process.md
   - Reference:
-    - Encoder: encoder.md
-    - Modulator: modulator.md
-    - Channel: channel.md  
-    - Decoder: decoder.md
-    - BER test: ber_test.md
+    - Encoder: pages/reference/encoder.md
+    - Modulator: pages/reference/modulator.md
+    - Channel: pages/reference/channel.md
+    - DecodingTreeNode: pages/reference/decoding_tree_node.md
+    - Decoder: pages/reference/decoder.md
+    - BER test: pages/reference/ber_test.md
   - Results: results.md
 
 theme:
   name: material
   icon:
-    logo: material/signal-5g
+    logo: simple/polars
     previous: fontawesome/solid/angle-left
     next: fontawesome/solid/angle-right
-    repo: fontawesome/brands/github 
+    repo: fontawesome/brands/github-alt 
   palette:
     - scheme: default
       primary: indigo
       toggle:
-        icon: material/brightness-7 
+        icon: material/lightbulb 
         name: Switch to dark mode
     - scheme: slate
       primary: indigo
       toggle:
-        icon: material/brightness-4
+        icon: material/lightbulb-outline
         name: Switch to light mode
 
 plugins:
   - search
+  - glightbox:
+      touchNavigation: false
+      loop: false
+      effect: zoom
+      slide_effect: none
+      width: auto
+      height: auto
+      zoomable: true
+      draggable: false
+      auto_caption: false
+      caption_position: bottom
+      background: white
+      shadow: true
+      manual: false
   - mkdocstrings:
       handlers: 
         python:
@@ -48,6 +68,7 @@ markdown_extensions:
   - attr_list
   - admonition
   - pymdownx.details
+  - pymdownx.blocks.caption
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.superfences:
@@ -60,8 +81,8 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_javascript:
-  - js/mermaid-callbacks.js
-  - js/mathjax.js
+  - assets/js/mermaid-callbacks.js
+  - assets/js/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   
   

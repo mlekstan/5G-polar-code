@@ -1,8 +1,10 @@
-from typing import Tuple
+import sys
+sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar-code\\")
+
 import numpy as np
 from numpy.typing import NDArray
 from math import log2, ceil
-from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
+from src.load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
 
 
 class Encoder:
@@ -165,4 +167,4 @@ if __name__ == "__main__":
 
     encoder = Encoder(pi_max_il, Q)
     message = np.random.randint(0, 2, 10, dtype=np.int8)
-    print(encoder.encode(msg=message, E=message.size))
+    print(encoder.encode(msg=message, E=message.size+1))

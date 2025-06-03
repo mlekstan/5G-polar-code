@@ -30,7 +30,7 @@ class Modulator(object):
         Returns
         -------
         bpsk_out_seq : NDArray[np.int8]
-            Seqence after BPSK modulation (channel input signal)
+            Seqence after BPSK modulation (channel input signal).
         """
         
         size = bit_seq.size

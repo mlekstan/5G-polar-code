@@ -5,12 +5,12 @@ sys.path.append("e:\\Studia_Teleinformatyka_2022_2023\\VI_semestr\\KiK\\5G-polar
 import numpy as np
 from numpy.typing import NDArray
 from numpy.testing import assert_array_equal
-from encoder import Encoder
-from load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
+from src.encoder import Encoder
+from src.load_tables import load_fixed_interleaving_pattern_table, load_polar_sequence_and_reliability_table
 
 
 
-def stndard_encoding(msg: NDArray[np.uint8], encoder: Encoder) -> NDArray[np.uint8]:
+def stndard_encoding(msg: NDArray[np.uint8], encoder: Encoder, E: int) -> NDArray[np.uint8]:
     """
     Function that impelemnts polar encoding directly according to 5G standard.
 
@@ -19,7 +19,9 @@ def stndard_encoding(msg: NDArray[np.uint8], encoder: Encoder) -> NDArray[np.uin
     msg : NDArray[np.uint8]
         Message bits sequence to be encoded.
     encoder : encoder.Encoder
-        Encoder object
+        Encoder object.
+    E : int
+        Rate matching output length. It is stated by the higher layers (MAC, scheduler) before channel encoding - in the transmission planning phase.
     
     Returns
     -------
@@ -28,7 +30,7 @@ def stndard_encoding(msg: NDArray[np.uint8], encoder: Encoder) -> NDArray[np.uin
     """
 
     K = msg.size
-    n = encoder.determine_n(K=K, E=10, n_max=9)
+    n = encoder.determine_n(K=K, E=E, n_max=9)
     N = pow(2, n)
     
     # permutation_pattern = self.interleave(K=K, i_il=False, pi_max_il=self.pi_max_il)
@@ -47,7 +49,6 @@ def stndard_encoding(msg: NDArray[np.uint8], encoder: Encoder) -> NDArray[np.uin
     d = np.mod(u @ Gn, 2)                   # encoded message (code word)
     
     return d
-
 
 
 
@@ -76,7 +77,7 @@ class TestEncoder(unittest.TestCase):
     def test_encode(self):
         for msg in self.msg_samples:
             with self.subTest(msg=msg):
-                assert_array_equal(self.encoder.encode(msg), stndard_encoding(msg, self.encoder))
+                assert_array_equal(self.encoder.encode(msg, E=msg.size+1), stndard_encoding(msg, self.encoder, E=msg.size+1))
 
 
 
