@@ -3,7 +3,6 @@ site_url: https://root/5g-polar-code
 
 nav:
   - Theory and math:
-      - General scheme: pages/theory/index.md
       - Encoding process: pages/theory/encoding_process.md
       - BPSK modulation: pages/theory/bpsk_modulation.md
       - Adding gaussian white noise: pages/theory/add_noise.md

@@ -58,7 +58,7 @@ flowchart BT
     - (d=1, i=0) $\quad u_1$
     - (d=1, i=1) $\quad u_2$
 
-    
+---    
 
 ## Example encoding for N = 4
 
@@ -159,6 +159,7 @@ flowchart BT
     - (d=2, i=2) $\quad u_3$
     - (d=2, i=3) $\quad u_4$
 
+---
 
 ## General case
 
