@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="https://root/5g-polar-code/pages/theory/decoding_process/" rel="canonical"/>
+<link href="../add_noise/" rel="prev"/>
+<link href="../../reference/encoder/" rel="next"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.14" name="generator"/>
+<title>Decoding process - 5G-polar-code</title>
+<link href="../../../assets/stylesheets/main.342714a4.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../assets/_mkdocstrings.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></link></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="5G-polar-code" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="5G-polar-code">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.954 7.714h.434c.106 0 .193.087.193.197v3.726a.197.197 0 0 1-.193.193h-.434a.197.197 0 0 1-.197-.193V7.911c0-.11.087-.197.197-.197m1.213 1.085h.435c.105 0 .192.087.192.196v2.521a.197.197 0 0 1-.192.193h-.435a.197.197 0 0 1-.197-.193v-2.52c0-.114.087-.197.197-.197m1.206 1.383h.43c.11 0 .197.087.197.197v.718a.197.197 0 0 1-.197.192h-.43a.197.197 0 0 1-.197-.196v-.718a.19.19 0 0 1 .197-.19zm-3.629-2.827h.431a.197.197 0 0 1 .197.196v.719a.197.197 0 0 1-.197.189h-.435a.197.197 0 0 1-.196-.19v-.718a.197.197 0 0 1 .196-.196Zm0 1.444h.431a.197.197 0 0 1 .197.196v.658a.197.197 0 0 1-.197.193h-.435a.197.197 0 0 1-.196-.193v-.658a.197.197 0 0 1 .196-.196zm0 1.387h.431a.197.197 0 0 1 .197.193v1.08a.197.197 0 0 1-.197.193h-.435a.197.197 0 0 1-.196-.192v-1.081a.197.197 0 0 1 .196-.193zm-1.24-3.133h.435a.197.197 0 0 1 .193.196v1.138a.197.197 0 0 1-.193.196h-.434a.197.197 0 0 1-.197-.196V7.249a.197.197 0 0 1 .197-.196Zm0 1.927h.435a.197.197 0 0 1 .193.197v2.162a.197.197 0 0 1-.193.192h-.434a.197.197 0 0 1-.197-.192V9.177a.197.197 0 0 1 .197-.197ZM17.3 6.694h.435a.197.197 0 0 1 .196.192v4.574a.197.197 0 0 1-.196.192H17.3a.197.197 0 0 1-.197-.192V6.886a.197.197 0 0 1 .197-.192m0 10.174h.435a.197.197 0 0 1 .196.197v.718a.197.197 0 0 1-.196.192H17.3a.197.197 0 0 1-.197-.196v-.718a.197.197 0 0 1 .197-.19zm-1.24-.964h.435a.197.197 0 0 1 .196.197v1.678a.197.197 0 0 1-.196.196h-.431a.197.197 0 0 1-.193-.196V16.1a.197.197 0 0 1 .193-.197zm0-5.117h.435a.197.197 0 0 1 .196.196v1.134a.197.197 0 0 1-.196.2h-.431a.197.197 0 0 1-.193-.196v-1.138a.197.197 0 0 1 .193-.196zm0-4.396h.435a.197.197 0 0 1 .196.197v3.605a.197.197 0 0 1-.196.197h-.431a.197.197 0 0 1-.193-.197V6.588a.197.197 0 0 1 .193-.197zm-1.22.06h.434a.197.197 0 0 1 .197.197V8.75a.197.197 0 0 1-.197.192h-.435a.197.197 0 0 1-.192-.192V6.648a.197.197 0 0 1 .192-.196zm0 2.892h.434a.197.197 0 0 1 .197.193v6.138a.197.197 0 0 1-.197.196h-.435a.197.197 0 0 1-.192-.196V9.536a.197.197 0 0 1 .192-.193Zm0 6.924h.434a.197.197 0 0 1 .197.193v1.14a.197.197 0 0 1-.197.193h-.435a.197.197 0 0 1-.192-.193v-1.14a.197.197 0 0 1 .192-.193zm-1.21-9.638h.43a.197.197 0 0 1 .197.2v4.925a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197V6.83a.197.197 0 0 1 .193-.197Zm0 5.722h.43a.197.197 0 0 1 .197.197v3.908a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197v-3.908a.197.197 0 0 1 .193-.197Zm-1.217-5.9h.435a.197.197 0 0 1 .192.197v3.179a.197.197 0 0 1-.192.196h-.435a.197.197 0 0 1-.197-.196V6.652a.197.197 0 0 1 .197-.197zm0 3.977h.435a.197.197 0 0 1 .192.192v2.646a.197.197 0 0 1-.192.193h-.435a.197.197 0 0 1-.197-.193V10.62a.197.197 0 0 1 .197-.192m0 3.428h.435a.197.197 0 0 1 .192.196v1.198a.197.197 0 0 1-.192.197h-.435a.197.197 0 0 1-.197-.197v-1.198a.197.197 0 0 1 .197-.196m-1.22-7.522h.434a.197.197 0 0 1 .196.19v1.443a.197.197 0 0 1-.196.193h-.439a.197.197 0 0 1-.196-.193v-1.44a.197.197 0 0 1 .196-.196zm0 2.227h.434a.197.197 0 0 1 .196.192v5.534a.197.197 0 0 1-.196.196h-.439a.197.197 0 0 1-.196-.196V8.753a.197.197 0 0 1 .196-.192Zm-1.225 8.182h.434a.197.197 0 0 1 .197.197v.835a.197.197 0 0 1-.197.197h-.434a.197.197 0 0 1-.193-.197v-.835a.197.197 0 0 1 .193-.197m0-10.658h.434a.197.197 0 0 1 .197.197v5.113a.197.197 0 0 1-.197.193h-.434a.197.197 0 0 1-.193-.193v-5.11a.197.197 0 0 1 .193-.196Zm0 5.904h.434a.197.197 0 0 1 .197.192v2.102a.197.197 0 0 1-.197.196h-.434a.197.197 0 0 1-.193-.196V12.18a.197.197 0 0 1 .193-.192zm-1.221 3.855h.434a.197.197 0 0 1 .193.189v1.742a.197.197 0 0 1-.193.197h-.434a.197.197 0 0 1-.197-.197v-1.738a.197.197 0 0 1 .197-.197zm0-6.025h.434a.197.197 0 0 1 .193.197v4.27a.197.197 0 0 1-.193.193h-.434a.197.197 0 0 1-.197-.196v-4.267a.197.197 0 0 1 .197-.19Zm0-3.794h.434a.197.197 0 0 1 .193.196v3.005a.197.197 0 0 1-.193.196h-.434a.197.197 0 0 1-.197-.196V6.22a.197.197 0 0 1 .197-.196Zm-1.221.06h.435a.197.197 0 0 1 .196.197V7a.197.197 0 0 1-.196.192h-.435A.197.197 0 0 1 7.332 7v-.718a.197.197 0 0 1 .193-.197Zm0 1.448h.435a.197.197 0 0 1 .196.192v5.541a.197.197 0 0 1-.196.193h-.435a.197.197 0 0 1-.193-.193V7.73a.197.197 0 0 1 .193-.193Zm0 6.323h.435a.197.197 0 0 1 .196.193v1.5a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197v-1.5a.197.197 0 0 1 .193-.193m0 2.286h.435a.197.197 0 0 1 .196.197v.956a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197v-.956a.197.197 0 0 1 .193-.197M6.305 6.57h.434a.197.197 0 0 1 .193.196v3.606a.197.197 0 0 1-.193.193h-.435a.197.197 0 0 1-.196-.193V6.765a.197.197 0 0 1 .196-.196Zm0 4.395h.434a.197.197 0 0 1 .193.193v.84a.197.197 0 0 1-.193.196h-.435a.197.197 0 0 1-.196-.197v-.839a.197.197 0 0 1 .196-.193Zm0 1.505h.43a.197.197 0 0 1 .197.196v3.727a.197.197 0 0 1-.197.196h-.43a.197.197 0 0 1-.197-.196v-3.727a.197.197 0 0 1 .196-.196ZM5.018 9.577h.56a.136.136 0 0 1 .132.136v2.763a.136.136 0 0 1-.132.136h-.556a.136.136 0 0 1-.136-.136V9.717a.136.136 0 0 1 .136-.14zm0 3.432h.56a.136.136 0 0 1 .132.136v2.483a.136.136 0 0 1-.132.136h-.556a.136.136 0 0 1-.136-.136v-2.475a.136.136 0 0 1 .136-.136zm0-5.96h.56a.136.136 0 0 1 .132.136v1.92a.136.136 0 0 1-.132.136h-.556a.136.136 0 0 1-.136-.136v-1.92a.136.136 0 0 1 .136-.136Zm-1.217.597h.552a.136.136 0 0 1 .136.132v2.884a.136.136 0 0 1-.136.132h-.552a.136.136 0 0 1-.136-.132V7.778a.136.136 0 0 1 .136-.132m0 3.5h.552a.136.136 0 0 1 .136.136v3.904a.136.136 0 0 1-.136.136h-.556a.136.136 0 0 1-.132-.136v-3.9a.136.136 0 0 1 .132-.136Zm-1.168 5.722h.435a.197.197 0 0 1 .197.197v.718a.197.197 0 0 1-.197.192h-.43a.197.197 0 0 1-.194-.196v-.718a.197.197 0 0 1 .193-.19zm-.06-2.562h.563a.136.136 0 0 1 .136.136v1.262a.136.136 0 0 1-.136.136h-.56a.136.136 0 0 1-.132-.136v-1.262a.136.136 0 0 1 .133-.136zm0-4.725h.563a.136.136 0 0 1 .136.132v4.075a.136.136 0 0 1-.136.136h-.56a.136.136 0 0 1-.132-.136V9.713a.136.136 0 0 1 .133-.132Zm-1.213 5.95h.555a.136.136 0 0 1 .136.135v2.173a.136.136 0 0 1-.136.136h-.56a.136.136 0 0 1-.135-.136v-2.173a.136.136 0 0 1 .136-.136zm.06-3.225h.431a.197.197 0 0 1 .197.193v2.506a.197.197 0 0 1-.197.196h-.435a.197.197 0 0 1-.196-.196v-2.506a.197.197 0 0 1 .196-.193ZM.14 15.001h.552c.075 0 .136.06.136.136v2.052c0 .076-.06.136-.136.136H.136A.136.136 0 0 1 0 17.19v-2.052c0-.076.06-.136.136-.136z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            5G-polar-code
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Decoding process
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/mlekstan/5G-polar-code" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 480 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"></path></svg>
+</div>
+<div class="md-source__repository">
+    mlekstan/5G-polar-code
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="5G-polar-code" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="5G-polar-code">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.954 7.714h.434c.106 0 .193.087.193.197v3.726a.197.197 0 0 1-.193.193h-.434a.197.197 0 0 1-.197-.193V7.911c0-.11.087-.197.197-.197m1.213 1.085h.435c.105 0 .192.087.192.196v2.521a.197.197 0 0 1-.192.193h-.435a.197.197 0 0 1-.197-.193v-2.52c0-.114.087-.197.197-.197m1.206 1.383h.43c.11 0 .197.087.197.197v.718a.197.197 0 0 1-.197.192h-.43a.197.197 0 0 1-.197-.196v-.718a.19.19 0 0 1 .197-.19zm-3.629-2.827h.431a.197.197 0 0 1 .197.196v.719a.197.197 0 0 1-.197.189h-.435a.197.197 0 0 1-.196-.19v-.718a.197.197 0 0 1 .196-.196Zm0 1.444h.431a.197.197 0 0 1 .197.196v.658a.197.197 0 0 1-.197.193h-.435a.197.197 0 0 1-.196-.193v-.658a.197.197 0 0 1 .196-.196zm0 1.387h.431a.197.197 0 0 1 .197.193v1.08a.197.197 0 0 1-.197.193h-.435a.197.197 0 0 1-.196-.192v-1.081a.197.197 0 0 1 .196-.193zm-1.24-3.133h.435a.197.197 0 0 1 .193.196v1.138a.197.197 0 0 1-.193.196h-.434a.197.197 0 0 1-.197-.196V7.249a.197.197 0 0 1 .197-.196Zm0 1.927h.435a.197.197 0 0 1 .193.197v2.162a.197.197 0 0 1-.193.192h-.434a.197.197 0 0 1-.197-.192V9.177a.197.197 0 0 1 .197-.197ZM17.3 6.694h.435a.197.197 0 0 1 .196.192v4.574a.197.197 0 0 1-.196.192H17.3a.197.197 0 0 1-.197-.192V6.886a.197.197 0 0 1 .197-.192m0 10.174h.435a.197.197 0 0 1 .196.197v.718a.197.197 0 0 1-.196.192H17.3a.197.197 0 0 1-.197-.196v-.718a.197.197 0 0 1 .197-.19zm-1.24-.964h.435a.197.197 0 0 1 .196.197v1.678a.197.197 0 0 1-.196.196h-.431a.197.197 0 0 1-.193-.196V16.1a.197.197 0 0 1 .193-.197zm0-5.117h.435a.197.197 0 0 1 .196.196v1.134a.197.197 0 0 1-.196.2h-.431a.197.197 0 0 1-.193-.196v-1.138a.197.197 0 0 1 .193-.196zm0-4.396h.435a.197.197 0 0 1 .196.197v3.605a.197.197 0 0 1-.196.197h-.431a.197.197 0 0 1-.193-.197V6.588a.197.197 0 0 1 .193-.197zm-1.22.06h.434a.197.197 0 0 1 .197.197V8.75a.197.197 0 0 1-.197.192h-.435a.197.197 0 0 1-.192-.192V6.648a.197.197 0 0 1 .192-.196zm0 2.892h.434a.197.197 0 0 1 .197.193v6.138a.197.197 0 0 1-.197.196h-.435a.197.197 0 0 1-.192-.196V9.536a.197.197 0 0 1 .192-.193Zm0 6.924h.434a.197.197 0 0 1 .197.193v1.14a.197.197 0 0 1-.197.193h-.435a.197.197 0 0 1-.192-.193v-1.14a.197.197 0 0 1 .192-.193zm-1.21-9.638h.43a.197.197 0 0 1 .197.2v4.925a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197V6.83a.197.197 0 0 1 .193-.197Zm0 5.722h.43a.197.197 0 0 1 .197.197v3.908a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197v-3.908a.197.197 0 0 1 .193-.197Zm-1.217-5.9h.435a.197.197 0 0 1 .192.197v3.179a.197.197 0 0 1-.192.196h-.435a.197.197 0 0 1-.197-.196V6.652a.197.197 0 0 1 .197-.197zm0 3.977h.435a.197.197 0 0 1 .192.192v2.646a.197.197 0 0 1-.192.193h-.435a.197.197 0 0 1-.197-.193V10.62a.197.197 0 0 1 .197-.192m0 3.428h.435a.197.197 0 0 1 .192.196v1.198a.197.197 0 0 1-.192.197h-.435a.197.197 0 0 1-.197-.197v-1.198a.197.197 0 0 1 .197-.196m-1.22-7.522h.434a.197.197 0 0 1 .196.19v1.443a.197.197 0 0 1-.196.193h-.439a.197.197 0 0 1-.196-.193v-1.44a.197.197 0 0 1 .196-.196zm0 2.227h.434a.197.197 0 0 1 .196.192v5.534a.197.197 0 0 1-.196.196h-.439a.197.197 0 0 1-.196-.196V8.753a.197.197 0 0 1 .196-.192Zm-1.225 8.182h.434a.197.197 0 0 1 .197.197v.835a.197.197 0 0 1-.197.197h-.434a.197.197 0 0 1-.193-.197v-.835a.197.197 0 0 1 .193-.197m0-10.658h.434a.197.197 0 0 1 .197.197v5.113a.197.197 0 0 1-.197.193h-.434a.197.197 0 0 1-.193-.193v-5.11a.197.197 0 0 1 .193-.196Zm0 5.904h.434a.197.197 0 0 1 .197.192v2.102a.197.197 0 0 1-.197.196h-.434a.197.197 0 0 1-.193-.196V12.18a.197.197 0 0 1 .193-.192zm-1.221 3.855h.434a.197.197 0 0 1 .193.189v1.742a.197.197 0 0 1-.193.197h-.434a.197.197 0 0 1-.197-.197v-1.738a.197.197 0 0 1 .197-.197zm0-6.025h.434a.197.197 0 0 1 .193.197v4.27a.197.197 0 0 1-.193.193h-.434a.197.197 0 0 1-.197-.196v-4.267a.197.197 0 0 1 .197-.19Zm0-3.794h.434a.197.197 0 0 1 .193.196v3.005a.197.197 0 0 1-.193.196h-.434a.197.197 0 0 1-.197-.196V6.22a.197.197 0 0 1 .197-.196Zm-1.221.06h.435a.197.197 0 0 1 .196.197V7a.197.197 0 0 1-.196.192h-.435A.197.197 0 0 1 7.332 7v-.718a.197.197 0 0 1 .193-.197Zm0 1.448h.435a.197.197 0 0 1 .196.192v5.541a.197.197 0 0 1-.196.193h-.435a.197.197 0 0 1-.193-.193V7.73a.197.197 0 0 1 .193-.193Zm0 6.323h.435a.197.197 0 0 1 .196.193v1.5a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197v-1.5a.197.197 0 0 1 .193-.193m0 2.286h.435a.197.197 0 0 1 .196.197v.956a.197.197 0 0 1-.196.197h-.435a.197.197 0 0 1-.193-.197v-.956a.197.197 0 0 1 .193-.197M6.305 6.57h.434a.197.197 0 0 1 .193.196v3.606a.197.197 0 0 1-.193.193h-.435a.197.197 0 0 1-.196-.193V6.765a.197.197 0 0 1 .196-.196Zm0 4.395h.434a.197.197 0 0 1 .193.193v.84a.197.197 0 0 1-.193.196h-.435a.197.197 0 0 1-.196-.197v-.839a.197.197 0 0 1 .196-.193Zm0 1.505h.43a.197.197 0 0 1 .197.196v3.727a.197.197 0 0 1-.197.196h-.43a.197.197 0 0 1-.197-.196v-3.727a.197.197 0 0 1 .196-.196ZM5.018 9.577h.56a.136.136 0 0 1 .132.136v2.763a.136.136 0 0 1-.132.136h-.556a.136.136 0 0 1-.136-.136V9.717a.136.136 0 0 1 .136-.14zm0 3.432h.56a.136.136 0 0 1 .132.136v2.483a.136.136 0 0 1-.132.136h-.556a.136.136 0 0 1-.136-.136v-2.475a.136.136 0 0 1 .136-.136zm0-5.96h.56a.136.136 0 0 1 .132.136v1.92a.136.136 0 0 1-.132.136h-.556a.136.136 0 0 1-.136-.136v-1.92a.136.136 0 0 1 .136-.136Zm-1.217.597h.552a.136.136 0 0 1 .136.132v2.884a.136.136 0 0 1-.136.132h-.552a.136.136 0 0 1-.136-.132V7.778a.136.136 0 0 1 .136-.132m0 3.5h.552a.136.136 0 0 1 .136.136v3.904a.136.136 0 0 1-.136.136h-.556a.136.136 0 0 1-.132-.136v-3.9a.136.136 0 0 1 .132-.136Zm-1.168 5.722h.435a.197.197 0 0 1 .197.197v.718a.197.197 0 0 1-.197.192h-.43a.197.197 0 0 1-.194-.196v-.718a.197.197 0 0 1 .193-.19zm-.06-2.562h.563a.136.136 0 0 1 .136.136v1.262a.136.136 0 0 1-.136.136h-.56a.136.136 0 0 1-.132-.136v-1.262a.136.136 0 0 1 .133-.136zm0-4.725h.563a.136.136 0 0 1 .136.132v4.075a.136.136 0 0 1-.136.136h-.56a.136.136 0 0 1-.132-.136V9.713a.136.136 0 0 1 .133-.132Zm-1.213 5.95h.555a.136.136 0 0 1 .136.135v2.173a.136.136 0 0 1-.136.136h-.56a.136.136 0 0 1-.135-.136v-2.173a.136.136 0 0 1 .136-.136zm.06-3.225h.431a.197.197 0 0 1 .197.193v2.506a.197.197 0 0 1-.197.196h-.435a.197.197 0 0 1-.196-.196v-2.506a.197.197 0 0 1 .196-.193ZM.14 15.001h.552c.075 0 .136.06.136.136v2.052c0 .076-.06.136-.136.136H.136A.136.136 0 0 1 0 17.19v-2.052c0-.076.06-.136.136-.136z"></path></svg>
+</a>
+    5G-polar-code
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/mlekstan/5G-polar-code" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 480 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"></path></svg>
+</div>
+<div class="md-source__repository">
+    mlekstan/5G-polar-code
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+<span class="md-ellipsis">
+    Theory and math
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_1_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+            Theory and math
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../encoding_process/">
+<span class="md-ellipsis">
+    Encoding process
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../bpsk_modulation/">
+<span class="md-ellipsis">
+    BPSK modulation
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../add_noise/">
+<span class="md-ellipsis">
+    Adding gaussian white noise
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Decoding process
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Reference
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../reference/encoder/">
+<span class="md-ellipsis">
+    Encoder
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../reference/modulator/">
+<span class="md-ellipsis">
+    Modulator
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../reference/channel/">
+<span class="md-ellipsis">
+    Channel
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../reference/decoding_tree_node/">
+<span class="md-ellipsis">
+    DecodingTreeNode
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../reference/decoder/">
+<span class="md-ellipsis">
+    Decoder
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../reference/ber_test/">
+<span class="md-ellipsis">
+    BER test
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../results/">
+<span class="md-ellipsis">
+    Results
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1>Decoding process</h1>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+<script src="../../../assets/js/mermaid-callbacks.js"></script>
+<script src="../../../assets/js/mathjax.js"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": false, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "none"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
