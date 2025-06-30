@@ -33,6 +33,9 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
+<a class="md-skip" href="#example-decoding-for-n-2">
+          Skip to content
+        </a>
 </div>
 <div data-md-component="announce">
 </div>
@@ -178,12 +181,66 @@
 </li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Decoding process
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
 <a class="md-nav__link md-nav__link--active" href="./">
 <span class="md-ellipsis">
     Decoding process
     
   </span>
 </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#example-decoding-for-n-2">
+<span class="md-ellipsis">
+      Example decoding for N = 2
+    </span>
+</a>
+<nav aria-label="Example decoding for N = 2" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#simple-decoding-lack-of-bpsk-and-awgn">
+<span class="md-ellipsis">
+      Simple decoding (lack of BPSK and AWGN)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llr-u1">
+<span class="md-ellipsis">
+      LLR (Log-Likehood Ratio) for \(u_1\)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llr-u2">
+<span class="md-ellipsis">
+      LLR (Log-Likehood Ratio) for \(u_2\)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#decoding-steps-with-llr">
+<span class="md-ellipsis">
+      Decoding steps (with LLR)
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -271,6 +328,51 @@
 <div class="md-sidebar__scrollwrap">
 <div class="md-sidebar__inner">
 <nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#example-decoding-for-n-2">
+<span class="md-ellipsis">
+      Example decoding for N = 2
+    </span>
+</a>
+<nav aria-label="Example decoding for N = 2" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#simple-decoding-lack-of-bpsk-and-awgn">
+<span class="md-ellipsis">
+      Simple decoding (lack of BPSK and AWGN)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llr-u1">
+<span class="md-ellipsis">
+      LLR (Log-Likehood Ratio) for \(u_1\)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llr-u2">
+<span class="md-ellipsis">
+      LLR (Log-Likehood Ratio) for \(u_2\)
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#decoding-steps-with-llr">
+<span class="md-ellipsis">
+      Decoding steps (with LLR)
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
 </nav>
 </div>
 </div>
@@ -278,6 +380,170 @@
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
 <h1>Decoding process</h1>
+<h2 id="example-decoding-for-n-2">Example decoding for N = 2</h2>
+<h3 id="simple-decoding-lack-of-bpsk-and-awgn">Simple decoding (lack of BPSK and AWGN)</h3>
+<pre class="mermaid"><code>%%{init: {"flowchart": {"htmlLabels": true}, "securityLevel": "loose"}}%%
+flowchart TB
+  A((d=0, i=0)) e1@--&gt; B((d=1, i=0))
+  A e2@--&gt; C((d=1, i=1))
+
+  e1@{ animate : true }
+  e2@{ animate : true }
+</code></pre>
+<div class="arithmatex">\[
+\begin{cases}
+x_1 = u_1 + u_2 \\
+x_2 = u_2
+\end{cases}
+\]</div>
+<div class="arithmatex">\[
+\begin{cases}
+u_1 = x_1 + u_2 \\
+x_2 = u_2
+\end{cases}
+\]</div>
+<div class="arithmatex">\[
+\begin{cases}
+u_1 = x_1 + x_2 \\
+u_2 = x_2
+\end{cases}
+\]</div>
+<div class="admonition info">
+<p class="admonition-title">Nodes info</p>
+<p>d - means depth, i - ID of node on given depth</p>
+<ul>
+<li>(d=0, i=0) <span class="arithmatex">\(\quad\vec{x} = \begin{pmatrix} u_{1} + u_{2} &amp; u_{2} \end{pmatrix} = \begin{pmatrix} x_{1} &amp; x_{2} \end{pmatrix}\)</span></li>
+<li>(d=1, i=0) <span class="arithmatex">\(\quad u_1 = x_1 + x_2\)</span></li>
+<li>(d=1, i=1) <span class="arithmatex">\(\quad u_2 = x_2\)</span></li>
+</ul>
+</div>
+<hr/>
+<h3 id="llr-u1">LLR (Log-Likehood Ratio) for <span class="arithmatex">\(u_1\)</span></h3>
+<p><strong>1. Signum</strong></p>
+<div class="arithmatex">\[
+\text{sgn}(a) = 
+\begin{cases}
++1, &amp; \text{if } \ a \geq 0 \\
+-1, &amp; \text{if } \ a &lt; 0
+\end{cases}
+\]</div>
+<p><strong>2. LLR</strong></p>
+<div class="arithmatex">\[
+L(u_1) = \ln\!\Biggl(\frac{\Pr\{u_1=0\mid r_1,r_2\}}{\Pr\{u_1=1\mid r_1,r_2\}}\Biggr) \approx \text{sgn}(r_1) \cdot \text{sgn}(r_2) \cdot \text{min}(|r_1|, |r_2|)
+\]</div>
+<p><strong>3. Hard decision</strong></p>
+<div class="arithmatex">\[
+\hat{u_1} = 
+\begin{cases}
+0, &amp; \text{if } \ L(u_1) \geq 0 \\
+1, &amp; \text{if } \ L(u_1) &lt; 0
+\end{cases}
+\]</div>
+<hr/>
+<h3 id="llr-u2">LLR (Log-Likehood Ratio) for <span class="arithmatex">\(u_2\)</span></h3>
+<p><strong>1. LLR</strong></p>
+<div class="arithmatex">\[
+L(u_2) = 
+\begin{cases}
+r_2 + r_1, &amp; \text{if } \ \hat{u_1} = 0 \\
+r_2 - r_1, &amp; \text{if } \ \hat{u_1} = 1
+\end{cases}
+\]</div>
+<p><strong>2. Hard decision</strong></p>
+<div class="arithmatex">\[
+\hat{u_2} = 
+\begin{cases}
+0, &amp; \text{if } \ L(u_2) \geq 0 \\
+1, &amp; \text{if } \ L(u_2) &lt; 0
+\end{cases}
+\]</div>
+<hr/>
+<h3 id="decoding-steps-with-llr">Decoding steps (with LLR)</h3>
+<div class="admonition info">
+<p class="admonition-title">Symbols info</p>
+<ul>
+<li><span class="arithmatex">\(f(r_1, r_2) = \text{sgn}(r_1) \cdot \text{sgn}(r_2) \cdot \text{min}(|r_1|,|r_2|)\)</span></li>
+<li>
+<div class="arithmatex">\[
+  g(r_1, r_2, \hat{u_1}) = 
+  r_2 + (1-2 \cdot \hat{u_1}) \cdot r_1 = 
+  \begin{cases}
+    r_2 + r_1, &amp; \text{if } \ \hat{u_1} = 0 \\
+    r_2 - r_1, &amp; \text{if } \ \hat{u_1} = 1
+  \end{cases}
+  \]</div>
+</li>
+</ul>
+</div>
+<p><strong>1. First step</strong></p>
+<pre class="mermaid"><code>%%{init: {"flowchart": {"htmlLabels": true}, "securityLevel": "loose"}}%%
+flowchart TB
+  A((d=0, i=0)) e1@--&gt;|e1| B((d=1, i=0))
+  A ---|e2| C((d=1, i=1))
+
+  e1@{ animate : true }
+
+</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Nodes and edges info</p>
+<p>d - means depth, i - ID of node on given depth</p>
+<ul>
+<li>(d=0, i=0) <span class="arithmatex">\(\quad\vec{r} = \begin{pmatrix} r_1 &amp; r_2 \end{pmatrix}\)</span></li>
+<li>e1 <span class="arithmatex">\(\quad f(r_1, r_2)\)</span></li>
+<li>(d=1, i=0) <span class="arithmatex">\(\quad\)</span> <a href="#llr-u1">hard desicion for</a> <span class="arithmatex">\(u_1 \ \rightarrow \ \hat{u_1}\)</span></li>
+</ul>
+</div>
+<p><strong>2. Second step</strong></p>
+<pre class="mermaid"><code>%%{init: {"flowchart": {"htmlLabels": true}, "securityLevel": "loose"}}%%
+flowchart BT
+  B((d=1, i=0)) e1@--&gt;|e1| A((d=0, i=0))
+  C((d=1, i=1)) ---|e2| A
+
+  e1@{ animate : true }
+</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Nodes and edges info</p>
+<p>d - means depth, i - ID of node on given depth</p>
+<ul>
+<li>(d=1, i=0) <span class="arithmatex">\(\quad\)</span> <a href="#llr-u1">hard desicion for</a> <span class="arithmatex">\(u_1 \ \rightarrow \ \hat{u_1}\)</span> </li>
+<li>e1 <span class="arithmatex">\(\quad \hat{u_1}\)</span></li>
+</ul>
+</div>
+<p><strong>3. Third step</strong></p>
+<pre class="mermaid"><code>%%{init: {"flowchart": {"htmlLabels": true}, "securityLevel": "loose"}}%%
+flowchart TB
+  A((d=0, i=0)) ---|e1| B((d=1, i=0))
+  A e2@--&gt;|e2| C((d=1, i=1))
+
+
+  e2@{ animate : true }
+</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Nodes and edges info</p>
+<p>d - means depth, i - ID of node on given depth</p>
+<ul>
+<li>(d=0, i=0) <span class="arithmatex">\(\quad \hat{u_1}\)</span></li>
+<li>e2 <span class="arithmatex">\(\quad g(r_1, r_2, \hat{u_1})\)</span></li>
+<li>(d=1, i=1) <span class="arithmatex">\(\quad\)</span> <a href="#llr-u2">hard desicion for</a> <span class="arithmatex">\(u_2 \ \rightarrow \ \hat{u_2}\)</span></li>
+</ul>
+</div>
+<p><strong>4. Fourth step</strong></p>
+<pre class="mermaid"><code>%%{init: {"flowchart": {"htmlLabels": true}, "securityLevel": "loose"}}%%
+flowchart BT
+  B((d=1, i=0)) ---|e1| A((d=0, i=0))
+  C((d=1, i=1)) e2@--&gt;|e2| A
+
+  e2@{ animate : true }
+</code></pre>
+<div class="admonition info">
+<p class="admonition-title">Nodes and edges info</p>
+<p>d - means depth, i - ID of node on given depth</p>
+<ul>
+<li>(d=1, i=1) <span class="arithmatex">\(\quad\)</span> <a href="#llr-u2">hard desicion for</a> <span class="arithmatex">\(u_2 \ \rightarrow \ \hat{u_2}\)</span></li>
+<li>e2 <span class="arithmatex">\(\quad \hat{u_2}\)</span></li>
+<li>(d=0, i=0) <span class="arithmatex">\(\quad \hat{\vec{x}} = \begin{pmatrix} \hat{u_1} + \hat{u_2} &amp; \hat{u_2} \end{pmatrix}\)</span></li>
+</ul>
+</div>
 </article>
 </div>
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
@@ -308,5 +574,11 @@
 <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": false, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "none"});
 document$.subscribe(() => { lightbox.reload() });
-</script></body>
+</script><script>window.mermaidConfig = {default: {
+    securityLevel: "loose",
+    startOnLoad: false,
+    mermaid: {
+        callback: myfun
+    }
+}};</script></body>
 </html>
